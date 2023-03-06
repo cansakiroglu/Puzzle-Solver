@@ -60,7 +60,7 @@ def solve(img: np.ndarray, m = 3, n = 3):
     By default, works on 3-by-3 images in terms of number of puzzle pieces stated with m and n respectively.
     """
 
-    all_permutations = np.array(list(permutations(np.array(range(0, 9)))))
+    all_permutations = np.array(list(permutations(np.array(range(0, m*n)))))
 
     min_summation = sys.maxsize
     minimizing_permutation = -1
