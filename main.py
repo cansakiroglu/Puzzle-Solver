@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 from copy import deepcopy
 from itertools import permutations
+import time
 
 def format_label(label: str) -> np.ndarray:
     """
@@ -102,9 +103,14 @@ path = 'data/valid/' + str(no) + '.jpg'
 img = cv2.imread(path)
 df = pd.read_csv('data/valid.csv')
 
+start = time.time()
+
 print('Correct Solution: ', df.iloc[no]['label'])
 solving_permutation, solved_img = solve(img)
 print('Solution Found: ', solving_permutation)
+
+end = time.time()
+print('Execution Time: ', str(end - start))
 
 cv2.imshow('original', img)
 cv2.imshow('solved', solved_img)
