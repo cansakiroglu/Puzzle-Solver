@@ -97,23 +97,46 @@ def solve(img: np.ndarray, m = 3, n = 3):
     return all_permutations[minimizing_permutation], create_image(img, all_permutations[minimizing_permutation], m, n)
 
 
-### DENEME
-no = 10
-path = 'data/valid/' + str(no) + '.jpg'
-img = cv2.imread(path)
-df = pd.read_csv('data/valid.csv')
+# ### JUST TRYING FOR AN INDIVIDUAL EXAMPLE
+# no = 10
+# path = 'data/valid/' + str(no) + '.jpg'
+# img = cv2.imread(path)
+# df = pd.read_csv('data/valid.csv')
 
-start = time.time()
+# start = time.time()
 
-print('Correct Solution: ', df.iloc[no]['label'])
-solving_permutation, solved_img = solve(img)
-print('Solution Found: ', solving_permutation)
+# print('Correct Solution: ', df.iloc[no]['label'])
+# solving_permutation, solved_img = solve(img)
+# print('Solution Found: ', solving_permutation)
 
-end = time.time()
-print('Execution Time: ', str(end - start))
+# end = time.time()
+# print('Execution Time: ', str(end - start))
 
-cv2.imshow('original', img)
-cv2.imshow('solved', solved_img)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
-### DENEME
+# cv2.imshow('original', img)
+# cv2.imshow('solved', solved_img)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+# ### JUST TRYING FOR AN INDIVIDUAL EXAMPLE
+
+
+### PERFORMANCE ON DATA
+data = pd.read_csv('data/valid.csv')
+accuracy = np.zeros(data.shape[0])
+
+from tqdm import tqdm
+for i in tqdm(range(data.shape[0])):
+    _, img_path, label_str = data.iloc[i]
+    path = 'data/valid/' + img_path
+    img = cv2.imread(path)
+    true_label = format_label(label_str)
+    solving_permutation, solved_img = solve(img)
+    difference = solving_permutation - true_label
+    hits = 0
+    for d in range(9):
+        if difference[d] == 0:
+            hits += 1
+    accuracy[i] = hits/9
+
+result_df = pd.DataFrame({'acc': accuracy})
+
+result_df.to_csv('results.csv')
